@@ -9,7 +9,7 @@ import { PRODUCTS } from '../constants';
 import { Product } from '../types';
 import ProductCard from './ProductCard';
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Design', 'Technology'];
 
@@ -104,17 +104,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({ onProductClick }) => {
         </div>
 
         {/* Large Grid */}
-        {filteredProducts.length === 1 ? (
-          <div className="flex justify-center">
-            <ProductCard product={filteredProducts[0]} onClick={onProductClick} />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} onClick={onProductClick} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20">
+          {filteredProducts.map(product => (
+            <ProductCard key={product.id} product={product} onClick={onProductClick} />
+          ))}
+        </div>
       </div>
     </section>
   );
