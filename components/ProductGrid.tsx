@@ -106,9 +106,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ onProductClick }) => {
         {/* Large Grid */}
         {filteredProducts.length === 1 ? (
           <div className="flex justify-center">
-            <div className="w-full md:max-w-[calc((100%-2rem)/2)] lg:max-w-[calc((100%-4rem)/3)]">
-              <ProductCard product={filteredProducts[0]} onClick={onProductClick} />
-            </div>
+            <ProductCard product={filteredProducts[0]} onClick={onProductClick} />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20">
