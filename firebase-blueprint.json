@@ -1,0 +1,121 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the application.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time the user was created."
+        }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "A record of a book purchase by a user.",
+      "type": "object",
+      "properties": {
+        "bookId": {
+          "type": "string",
+          "description": "The ID of the purchased book."
+        },
+        "purchasedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time the purchase was made."
+        }
+      },
+      "required": ["bookId", "purchasedAt"]
+    },
+    "Book": {
+      "title": "Book",
+      "description": "A digital book available for purchase.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the book."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the book."
+        },
+        "author": {
+          "type": "string",
+          "description": "The author's name."
+        },
+        "price": {
+          "type": "number",
+          "description": "The price of the book in USD."
+        },
+        "coverUrl": {
+          "type": "string",
+          "description": "URL to the cover image."
+        }
+      },
+      "required": ["title", "description", "author", "price"]
+    },
+    "Chapter": {
+      "title": "Chapter",
+      "description": "A chapter of a book.",
+      "type": "object",
+      "properties": {
+        "bookId": {
+          "type": "string",
+          "description": "The ID of the book this chapter belongs to."
+        },
+        "number": {
+          "type": "string",
+          "description": "The chapter number or identifier (e.g., 'Chapter One')."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the chapter."
+        },
+        "content": {
+          "type": "string",
+          "description": "The markdown content of the chapter."
+        },
+        "order": {
+          "type": "number",
+          "description": "The sequential order of the chapter."
+        },
+        "isPreview": {
+          "type": "boolean",
+          "description": "Whether this chapter is available for free preview."
+        }
+      },
+      "required": ["bookId", "number", "content", "order", "isPreview"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles."
+    },
+    "users/{userId}/purchases/{purchaseId}": {
+      "schema": { "$ref": "#/entities/Purchase" },
+      "description": "Stores records of books purchased by the user."
+    },
+    "books/{bookId}": {
+      "schema": { "$ref": "#/entities/Book" },
+      "description": "Stores public information about books."
+    },
+    "chapters/{chapterId}": {
+      "schema": { "$ref": "#/entities/Chapter" },
+      "description": "Stores the actual content of the book chapters."
+    }
+  }
+}

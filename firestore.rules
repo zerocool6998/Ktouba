@@ -1,0 +1,47 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasPurchasedBook(bookId) {
+      return isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)/purchases/$(bookId));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      
+      match /purchases/{bookId} {
+        // In a real app, create/update would be restricted to a secure backend webhook.
+        // For this prototype, we allow the user to write their own purchase record.
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    match /books/{bookId} {
+      allow read: if true;
+      allow write: if false; // Only admins can modify books (not implemented in this prototype)
+    }
+
+    match /chapters/{chapterId} {
+      // Allow read if it's a preview chapter, OR if the user has purchased the book
+      allow read: if resource.data.isPreview == true || hasPurchasedBook(resource.data.bookId);
+      allow write: if false; // Only admins can modify chapters
+    }
+  }
+}
